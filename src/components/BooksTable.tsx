@@ -40,9 +40,11 @@ export function BooksTable({ books }: Props) {
   const [columnVisibilityModel, setColumnVisibilityModel] =
     useLocalStorage<GridColumnVisibilityModel>("books.columns", {});
 
-  const [zoomSrc, setZoomSrc] = useState<{ src: string; alt: string } | null>(
-    null,
-  );
+  const [zoomSrc, setZoomSrc] = useState<{
+    thumb: string | null;
+    large: string | null;
+    alt: string;
+  } | null>(null);
   const [activeBook, setActiveBook] = useState<Book | null>(null);
 
   const filteredBooks = useMemo(() => {
@@ -127,7 +129,7 @@ export function BooksTable({ books }: Props) {
               skeletonRadius={6}
               onClick={(e) => {
                 e.stopPropagation();
-                setZoomSrc({ src: large ?? src, alt: params.row.title });
+                setZoomSrc({ thumb: src, large, alt: params.row.title });
               }}
               sx={{
                 width: 72,
@@ -135,7 +137,6 @@ export function BooksTable({ books }: Props) {
                 borderRadius: 1.5,
                 overflow: "hidden",
                 cursor: "zoom-in",
-                boxShadow: `0 6px 18px ${alpha("#000", isDark ? 0.5 : 0.18)}`,
                 transition: "transform 160ms ease, box-shadow 160ms ease",
                 "&:hover": {
                   transform: "translateY(-2px) scale(1.03)",
@@ -349,7 +350,8 @@ export function BooksTable({ books }: Props) {
 
       <ImageZoomModal
         open={zoomSrc !== null}
-        src={zoomSrc?.src ?? null}
+        thumb={zoomSrc?.thumb ?? null}
+        large={zoomSrc?.large ?? null}
         alt={zoomSrc?.alt ?? ""}
         onClose={() => setZoomSrc(null)}
       />

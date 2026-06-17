@@ -20,7 +20,7 @@ export function LazyImage({
   src,
   alt,
   eager = false,
-  skeletonRadius = 6,
+  skeletonRadius,
   sx,
   onClick,
   ...rest
@@ -69,8 +69,10 @@ export function LazyImage({
       onClick={onClick}
       sx={{
         position: "relative",
-        display: "inline-flex",
+        display: "block",
+        boxSizing: "border-box",
         overflow: "hidden",
+        flexShrink: 0,
         ...sx,
       }}
     >
@@ -79,25 +81,24 @@ export function LazyImage({
           aria-hidden
           sx={{
             position: "absolute",
-            inset: 0,
-            borderRadius: skeletonRadius,
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            boxSizing: "border-box",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            color: alpha(theme.palette.primary.main, isDark ? 0.45 : 0.35),
+            color: alpha(theme.palette.primary.main, isDark ? 0.5 : 0.4),
             background: `linear-gradient(110deg, ${baseColor} 30%, ${highlightColor} 50%, ${baseColor} 70%)`,
             backgroundSize: "200% 100%",
             animation: errored ? "none" : `${shimmer} 1.6s linear infinite`,
-            border: `1px solid ${alpha(
-              theme.palette.primary.main,
-              isDark ? 0.18 : 0.12,
-            )}`,
           }}
         >
           {errored ? (
-            <BrokenImageIcon sx={{ fontSize: 28, opacity: 0.6 }} />
+            <BrokenImageIcon sx={{ fontSize: 28, opacity: 0.7 }} />
           ) : (
-            <MenuBookIcon sx={{ fontSize: 28, opacity: 0.7 }} />
+            <MenuBookIcon sx={{ fontSize: 28, opacity: 0.8 }} />
           )}
         </Box>
       )}
@@ -115,9 +116,12 @@ export function LazyImage({
           }}
           {...rest}
           sx={{
+            position: "absolute",
+            top: 0,
+            left: 0,
             width: "100%",
             height: "100%",
-            objectFit: "contain",
+            objectFit: "cover",
             opacity: loaded ? 1 : 0,
             transform: loaded ? "scale(1)" : "scale(0.98)",
             transition:
