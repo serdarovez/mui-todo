@@ -53,7 +53,21 @@ export function ImageZoomModal({ open, thumb, large, alt, onClose }: Props) {
   const showInitialSpinner = !displaySrc || (displaySrc === thumb && !thumbReady);
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
+    <Dialog
+      open={open}
+      onClose={onClose}
+      maxWidth="sm"
+      fullWidth
+      scroll="paper"
+      slotProps={{
+        paper: {
+          sx: {
+            maxHeight: "calc(100vh - 32px)",
+            m: 2,
+          },
+        },
+      }}
+    >
       <DialogTitle sx={{ pr: 6, fontWeight: 700 }}>
         {alt || "Cover preview"}
         <IconButton
@@ -80,13 +94,14 @@ export function ImageZoomModal({ open, thumb, large, alt, onClose }: Props) {
       <DialogContent
         dividers
         sx={{
-          p: 0,
+          p: 2,
           position: "relative",
           minHeight: 280,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           bgcolor: "action.hover",
+          overflow: "hidden",
         }}
       >
         {displaySrc ? (
@@ -99,9 +114,13 @@ export function ImageZoomModal({ open, thumb, large, alt, onClose }: Props) {
                 if (displaySrc === thumb) setThumbReady(true);
               }}
               sx={{
-                width: "100%",
-                height: "auto",
                 display: "block",
+                maxWidth: "100%",
+                maxHeight: "70vh",
+                width: "auto",
+                height: "auto",
+                objectFit: "contain",
+                margin: "0 auto",
                 filter: hiResReady ? "none" : "blur(4px)",
                 transition: "filter 320ms ease",
                 opacity: showInitialSpinner ? 0 : 1,
