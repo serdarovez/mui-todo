@@ -3,7 +3,8 @@
 Test assignment — a React + Material-UI table that displays book data from the
 [Open Library Search API](https://openlibrary.org/developers/api).
 
-> Live demo: _add Netlify / GitHub Pages URL here after deploy_
+> Live demo: **https://serdarovez.github.io/mui-todo/**
+> Repository: **https://github.com/serdarovez/mui-todo**
 
 ## Stack
 
@@ -77,14 +78,19 @@ src/
 
 ## Deploying
 
-The repository is a Vite SPA — any static host works.
+The repo ships with a GitHub Actions workflow
+([.github/workflows/deploy.yml](.github/workflows/deploy.yml)) that builds the
+Vite app on every push to `main` and publishes it to GitHub Pages.
 
-- **Netlify**: connect the repo, build command `npm run build`, publish
-  directory `dist`.
-- **GitHub Pages**: `npm run build` then push `dist/` to the `gh-pages` branch
-  (or use `peaceiris/actions-gh-pages` in CI).
+To enable it once:
 
-Replace the demo link at the top once deployed.
+1. **Repo Settings → Pages → Source: "GitHub Actions"**
+2. Push to `main` — the workflow runs `npm ci && npm run build` and uploads
+   `dist/` as the Pages artifact.
+3. The site is served from `https://<username>.github.io/mui-todo/`.
+
+`vite.config.ts` sets `base: '/mui-todo/'` so asset URLs resolve correctly
+under the subpath. If you fork and rename the repo, update `base` to match.
 
 ---
 
